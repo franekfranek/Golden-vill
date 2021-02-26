@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "scss"
         },
         "@schematics/angular:application": {
           "strict": true
@@ -31,7 +31,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass"
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -94,7 +95,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -127,5 +128,10 @@
       }
     }
   },
-  "defaultProject": "Golden-vill"
+  "defaultProject": "Golden-vill",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

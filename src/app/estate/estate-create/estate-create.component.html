@@ -1,0 +1,82 @@
+<div class="container-fluid">
+
+  <div class="text-right mb-4">
+    <button class="btn btn-primary" (click)="openModal(popup, '')">
+      <i class="fa fa-plus"></i> Dodaj
+    </button>
+  </div>
+
+  <div class="row" *ngIf='estates.length'>
+    <div class="col-md-3" *ngFor="let estate of estates">
+      <div class="card">
+        <div class="heading">{{estate.city}}</div>
+        <div class="sub-heading">{{estate.street}}</div>
+        
+        <div class="icon">
+          <i class="fa fa-edit text-primary" (click)="openModal(popup, estate.id)"></i>
+          <i class="fa fa-trash text-danger" (click)="removeEstate(estate.id)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #popup let-d="dismiss">
+  <div class="modal-header text-primary">
+    {{estateDetails ? 'Aktualizuj' : 'Dodaj'}} pozycję
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form">
+
+      <div class="form-group">
+        <label for="name">Miasto</label>
+        <input id="name" type="text" formControlName="city"
+               class="form-control" [ngClass]="{'error-border': !form.get('city')?.valid && form.get('name')?.dirty}"/>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Ulica</label>
+        <input id="email" type="text" formControlName="street"
+               class="form-control" [ngClass]="{'error-border': !form.get('street')?.valid && form.get('email')?.dirty}"/>
+      </div>
+
+    </form>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-sm pl-4 pr-4 mr-2"
+              [disabled]="!form.valid"
+              (click)="estateDetails ? updateEstate(estateDetails.id) : addEstate(); d()">Save</button>
+      <button class="btn btn-secondary btn-sm pl-4 pr-4 ml-2" (click)="d()">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+ 
+
+<!-- <form (ngSubmit)="createNewEstate()">
+  <h2>Dodaj nowa nieruchomosc</h2>
+
+  <div class="form-group">
+    <input type="text" 
+           class="form-control" placeholder="Miasto">
+  </div>
+  <div class="form-group">
+    <input type="text" 
+           class="form-control" placeholder="Ulica">
+  </div>
+  <div class="form-group">
+    <label for="typ">Typ nieruchomosci:</label>
+    <select id="typ" name="typ">
+      <option value="miesznkanie">Mieszkanie</option>
+      <option value="dom">Dom</option>
+      <option value="dzialka">Działka</option>
+    </select>
+  </div>
+
+  <div class="form-group text-center">
+    <button class="btn btn-success" type="submit">Dodaj</button>
+    <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+  </div>
+
+</form> -->
