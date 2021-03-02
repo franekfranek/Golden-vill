@@ -9,9 +9,15 @@
   <div class="row" *ngIf='estates.length'>
     <div class="col-md-3" *ngFor="let estate of estates">
       <div class="card">
+        <div class="image-container">
+          <div class="col-md-3" *ngFor="let image of estate.links">
+            <img src="{{image}}" alt="">
+            <hr>
+          </div>
+        </div>
         <div class="heading">{{estate.city}}</div>
         <div class="sub-heading">{{estate.street}}</div>
-        
+       
         <div class="icon">
           <i class="fa fa-edit text-primary" (click)="openModal(popup, estate.id)"></i>
           <i class="fa fa-trash text-danger" (click)="removeEstate(estate.id)"></i>
@@ -24,7 +30,7 @@
 
 <ng-template #popup let-d="dismiss">
   <div class="modal-header text-primary">
-    {{estateDetails ? 'Aktualizuj' : 'Dodaj'}} pozycję
+    {{estateDetails ? 'Aktualizuj' : 'Dodaj nową'}} pozycję
   </div>
 
   <div class="modal-body">
@@ -41,14 +47,24 @@
         <input id="email" type="text" formControlName="street"
                class="form-control" [ngClass]="{'error-border': !form.get('street')?.valid && form.get('email')?.dirty}"/>
       </div>
+      <div class="form-group">
+        <label for="email">Zdjecia</label>
+        <ngx-dropzone (change)="onSelect($event)">
+          <ngx-dropzone-label>Naciśnij lub przeciągnij zdjęcia</ngx-dropzone-label>
+        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+          <ngx-dropzone-label>({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-image-preview>
+        </ngx-dropzone>
+
+    </div>
 
     </form>
 
     <div class="text-center">
       <button class="btn btn-primary btn-sm pl-4 pr-4 mr-2"
               [disabled]="!form.valid"
-              (click)="estateDetails ? updateEstate(estateDetails.id) : addEstate(); d()">Save</button>
-      <button class="btn btn-secondary btn-sm pl-4 pr-4 ml-2" (click)="d()">Cancel</button>
+              (click)="estateDetails ? updateEstate(estateDetails.id) : handleSaveEstate(); d()">Dodaj</button>
+      <button class="btn btn-secondary btn-sm pl-4 pr-4 ml-2" (click)="d()">Anuluj</button>
     </div>
   </div>
 </ng-template>

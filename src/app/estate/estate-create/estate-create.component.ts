@@ -1,24 +1,28 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FirebaseService, IEstate } from 'src/app/_services/firebase.service';
-
+import { CloudinaryService } from 'src/app/_services/cloudinary.service';
+import { forkJoin, from, Observable, of } from 'rxjs';
+import { map, finalize, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-estate-create',
   templateUrl: './estate-create.component.html',
-  styleUrls: ['./estate-create.component.scss']
+  styleUrls: ['./estate-create.component.scss'],
+  providers: [CloudinaryService]
 })
 export class EstateCreateComponent implements OnInit {
 
-  public form: FormGroup;
-  public estates: IEstate[] = [];
-  public estateDetails: IEstate | undefined ;
-
+  form: FormGroup;
+  estates: IEstate[] = [];
+  estateDetails: IEstate | undefined ;
+  files: File[] = [];
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private cloudinary: CloudinaryService 
   ) { }
 
   ngOnInit(): void {
@@ -28,13 +32,13 @@ export class EstateCreateComponent implements OnInit {
   getEstates(): void {
     this.firebaseService.getEstates().subscribe((res) =>{
       this.estates = res.map((estate : any) => {
-        console.log(estate);
-        console.log(estate.payload.doc.data());
+        // console.log(estate.payload.doc.data());
         let details = estate.payload.doc.data();
         return{
           id: estate.payload.doc.id,
           city: details.city,
           street: details.street,
+          links: details.links
         } as IEstate
       });
     });
@@ -54,8 +58,18 @@ export class EstateCreateComponent implements OnInit {
     })
   }
 
-  addEstate(): void{
-    this.firebaseService.addEstate(this.form.value).then();
+  addEstate(links: string[]): Observable<any>{
+    // this.form.addControl('urls', new FormControl(urls));
+    let data = {
+      city: this.form.value.city,
+      street: this.form.value.street,
+      links: links
+    } as IEstate;
+
+    return from(this.firebaseService.addEstate(data))
+    // this.firebaseService.addEstate(data).then((res) =>{
+    //   console.log(res);
+    // });
   }
   
   updateEstate(estateId: string | undefined): void{
@@ -67,12 +81,68 @@ export class EstateCreateComponent implements OnInit {
     this.firebaseService.deleteEstate(estateId).then();
   }
 
-
-  createNewEstate(){
-    console.log('hej');
+  handleSaveEstate() {
+    let result: string[];
+    this.uploadToCloudinary().pipe(
+      switchMap(urls => this.addEstate(urls))
+    ).subscribe({
+      next: (res) => {
+        console.log(res);  // <-- response from `this.firebaseService.addEstate()`
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        console.log('complete')
+      }
+    });
   }
 
-  cancel(){
-    console.log('cancel');
+  uploadToCloudinary(){
+    // let urls : {[n: number]: string} = {};
+    // let urls: string[] = [];
+    
+    // for (let i = 0; i < this.files.length; i++) {
+    //   data.append('file', this.files[i]);
+    //   data.append('upload_preset', 'golden_vill_upload')
+    //   data.append('cloud_name', 'dv3imnwp0')
+
+    //   this.cloudinary.uploadImage(data).subscribe(res =>{
+    //     // urls[i] = res.secure_url;
+    //     urls.push(res.secure_url); 
+    //     // this.urls.pipe(map(arr => {
+    //     //   arr.push(res.secure_url);
+    //     //   return arr;
+    //     // }));
+    //   });
+    // }
+    return forkJoin(
+      this.files.map(file => {
+        const data = new FormData();
+
+        data.append('file', file);
+        data.append('upload_preset', 'golden_vill_upload')
+        data.append('cloud_name', 'dv3imnwp0')
+        return this.cloudinary.uploadImage(data).pipe(
+          map(res =>{
+            console.log(res.secure_url);
+            return res.secure_url;
+          } )
+        );
+      })
+    );
   }
+  
+
+  onSelect(event: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+    console.log(this.files);
+  }
+
+  onRemove(event: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+  
 }

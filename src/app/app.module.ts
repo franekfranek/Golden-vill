@@ -17,6 +17,9 @@ import { EstateCreateComponent } from './estate/estate-create/estate-create.comp
 import { RegisterComponent } from './register/register.component';
 import { environment } from 'src/environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AngularFirestoreModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    NgxDropzoneModule,
+    HttpClientModule
     
   ],
   providers: [FirebaseService],

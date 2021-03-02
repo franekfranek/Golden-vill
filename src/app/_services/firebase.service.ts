@@ -36,7 +36,7 @@ export class FirebaseService {
   }
 
   addEstate(estate: IEstate){
-    return this.firestore.collection('estate').add(estate);
+    return this.firestore.collection('estate').doc().set(estate);
   }
 
   updateEstate(estateId: string | undefined , estate: IEstate){
@@ -47,7 +47,6 @@ export class FirebaseService {
     return this.firestore.doc('estate/' + estateId).delete();
 
   }
-  
 
 }
 
@@ -55,5 +54,6 @@ export interface IEstate{
   id?: string;
   city: string;
   street: string;
-
+  // urls: {[n: number]: string};
+  links: string[];
 }

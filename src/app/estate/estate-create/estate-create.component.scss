@@ -44,3 +44,12 @@ button:focus {
 .error-border {
   border: 1px solid crimson;
 }
+
+.image-container{
+  img{
+    max-width: 150px;
+    max-height: 100px;
+  }
+  padding: 10px;
+  margin: 10px;
+}
