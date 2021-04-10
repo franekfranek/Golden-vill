@@ -1,1 +1,27 @@
-<p>estate-details works!</p>
+<section class="estate-details">
+  <div class="title">
+    <div>{{estate.street}}</div>
+    <div>{{estate.price}}</div>
+    
+  </div>
+
+  <div class="gallery">
+    <div *ngFor="let link of estate.links">
+      <div class="picsum-img-wrapper">
+        <img src="{{link}}" alt="Random first slide">
+      </div>
+    </div>
+  </div>
+
+  <div class="details">
+
+  </div>
+
+  <h2>Opis nieruchomości</h2>
+  <div class="desc">
+
+  </div>
+
+
+
+</section>

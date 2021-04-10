@@ -1,1 +1,27 @@
-<p>estate-card works!</p>
+<div class="card-custom"  >
+
+  <ngb-carousel [routerLink]="['/nieruchomosci/', estate.id]">
+    <ng-template ngbSlide *ngFor="let link of estate.links">
+      <div class="picsum-img-wrapper">
+        <img src="{{link}}" alt="Random first slide">
+      </div>
+      
+    </ng-template>
+    
+  </ngb-carousel>
+  <div class="info-banner">
+    <i class="fa fa-home"></i><span> {{formattedEstate.type }} | {{ formattedEstate.class}}</span><br>
+    <span>{{estate.price | currency : 'PLN' : 'symbol' : '1.0-0'}}</span>
+
+  </div>
+  <div class="city-street">
+    {{estate.street}},{{estate.city}}
+  </div>
+
+  <div class="rooms-sfootage">
+    <div>Pokoje: {{estate.rooms}}</div>
+    <div>Metraż: {{estate.sfootage}} m<sup>2</sup></div>
+  </div>
+</div>
+
+

@@ -1,0 +1,64 @@
+<div class="form-container">
+  <form [formGroup]="form">
+
+    <div class="form-group">
+      <label for="local">Lokalizacja</label>
+      <input id="local" type="text" formControlName="local"
+             class="form-control"/>
+    </div>
+    
+    <div class="form-group">
+      <label for="priceFrom">Cena od </label>
+      <input id="priceFrom" type="text" formControlName="priceFrom"
+             class="form-control" />
+    </div>
+    
+    <div class="form-group">
+      <label for="priceTo">Cena do</label>
+      <input id="priceTo" type="text" formControlName="priceTo"
+             class="form-control" />
+    </div>
+  
+    <div class="form-group">
+      <label for="type">Typ nieruchomosci:</label>
+      <select id="type" name="type" formControlName="type">
+        <option value="flat">Mieszkanie</option>
+        <option value="house">Dom</option>
+        <option value="land">Grunt</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label for="class">Rodzaj transakcji:</label>
+      <select id="class" name="class" formControlName="class">
+        <option value="sell">Sprzedaż</option>
+        <option value="rent">Wynajem</option>
+        <option value="rent">Dzierżawa</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="rooms">Ilość pokoi:</label>
+      <input id="rooms" type="rooms" formControlName="rooms"
+             class="form-control"/>
+    </div>
+
+  </form>
+
+  <button class="btn btn-primary btn-sm pl-4 pr-4 mr-2"
+              [disabled]="!form.valid"
+              (click)="search()">
+              Wyszukaj
+  </button>
+  
+</div>
+
+<button (click)="search()">Search</button>
+
+<div class="searched-elements">
+  <div class="row" *ngIf='result.length'>
+    <div class="col-md-3" *ngFor="let estate of result">
+      <app-estate-card [estate]="estate"></app-estate-card>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +19,8 @@ import { environment } from 'src/environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { HttpClientModule } from '@angular/common/http';
-
+import '@angular/common/locales/global/pl';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
     NavBarComponent,
     EstateCreateComponent,
     RegisterComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,16 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
     
   ],
-  providers: [FirebaseService],
+  providers: [FirebaseService,
+    {
+      provide: LOCALE_ID,
+      useValue: 'pl-PL'
+     },
+     {
+       provide: DEFAULT_CURRENCY_CODE,
+       useValue: 'PLN'
+     }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

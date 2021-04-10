@@ -5,6 +5,7 @@ import { EstateDetailsComponent } from './estate/estate-details/estate-details.c
 import { EstateListComponent } from './estate/estate-list/estate-list.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
+import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
   {path: "", component: HomeComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
         children: [
             {path: "register", component: RegisterComponent},
+            {path: "szukaj", component: SearchComponent},
             {path: "nieruchomosci", component: EstateListComponent},
             {path: "nieruchomosci/create", component: EstateCreateComponent },
             {path: "nieruchomosci/:id", component: EstateDetailsComponent}

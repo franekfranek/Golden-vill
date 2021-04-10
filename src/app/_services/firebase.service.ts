@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class FirebaseService {
 
   isLoggedIn = false;
-  constructor(private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore) { }
+  estateCollection: AngularFirestoreCollection<IEstate>;
+
+
+  constructor(private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore) {
+    this.estateCollection = this.firestore.collection('estate');
+   }
 
   async signIn(email: string, password: string){
     await this.firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -31,7 +37,13 @@ export class FirebaseService {
     localStorage.removeItem('user');
   }
 
-  getEstates(){
+  getEstates() {
+    // return this.firestore.collection('estate'). snapshotChanges().pipe(
+    //   map(a => {
+    //     const data = a.payload.val() as Course;
+    //       const id = a.payload.key;
+    //       return { id, ...data };
+    //     }));
     return this.firestore.collection('estate'). snapshotChanges();
   }
 
@@ -45,15 +57,38 @@ export class FirebaseService {
   
   deleteEstate(estateId: string | undefined){
     return this.firestore.doc('estate/' + estateId).delete();
+  }
+  
+  getEstateById(estateId: any){
+    return this.firestore.collection('estate').doc(estateId).valueChanges();
+  }
 
+  getByFilters(form: FormGroup){
+    console.log(form.value);
+    return this.estateCollection = this.firestore.collection<IEstate>("estate", ref => {
+       return ref.where("city", "==", form.value.local)
+                .where("class", "==", form.value.class)
+                .where("type", "==", form.value.type)
+                .where("priceFrom", ">=", form.value.priceFrom);
+    
+    });
   }
 
 }
 
-export interface IEstate{
+export interface  IEstate{
   id?: string;
   city: string;
   street: string;
-  // urls: {[n: number]: string};
+  price: string;
+  type: string;
+  class: string;
+  sfootage: string;
+  rooms: string;
+  floor: string;
+  bildYear: string;
+  garage: string;
+  elevator: string;
+  basement: string;
   links: string[];
 }

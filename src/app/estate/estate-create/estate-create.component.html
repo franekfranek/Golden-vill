@@ -4,6 +4,10 @@
     <button class="btn btn-primary" (click)="openModal(popup, '')">
       <i class="fa fa-plus"></i> Dodaj
     </button>
+    
+    <button class="btn btn-primary" (click)="logout()">
+      <i class="fa fa-plus"></i> Wyloguj
+    </button>
   </div>
 
   <div class="row" *ngIf='estates.length'>
@@ -37,18 +41,91 @@
     <form [formGroup]="form">
 
       <div class="form-group">
-        <label for="name">Miasto</label>
-        <input id="name" type="text" formControlName="city"
-               class="form-control" [ngClass]="{'error-border': !form.get('city')?.valid && form.get('name')?.dirty}"/>
+        <label for="city">Miasto</label>
+        <input id="city" type="text" formControlName="city"
+               class="form-control"/>
       </div>
 
       <div class="form-group">
-        <label for="email">Ulica</label>
-        <input id="email" type="text" formControlName="street"
-               class="form-control" [ngClass]="{'error-border': !form.get('street')?.valid && form.get('email')?.dirty}"/>
+        <label for="street">Ulica z numer</label>
+        <input id="street" type="text" formControlName="street"
+               class="form-control" />
       </div>
+      
       <div class="form-group">
-        <label for="email">Zdjecia</label>
+        <label for="price">Cena</label>
+        <input id="price" type="text" formControlName="price"
+               class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="type">Typ nieruchomosci:</label>
+        <select id="type" name="type" formControlName="type">
+          <option value="flat">Mieszkanie</option>
+          <option value="house">Dom</option>
+          <option value="land">Grunt</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="class">Rodzaj:</label>
+        <select id="class" name="class" formControlName="class">
+          <option value="sell">Sprzedaż</option>
+          <option value="rent">Wynajem</option>
+          <option value="rent">Dzierżawa</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="sfootage">Metraż w metrach:</label>
+        <input id="sfootage" type="sfootage" formControlName="sfootage"
+               class="form-control" [ngClass]="{'error-border': !form.get('price')?.valid && form.get('price')?.dirty}"/>
+      </div>
+      
+      <div class="form-group">
+        <label for="rooms">Ilość pokoi:</label>
+        <input id="rooms" type="rooms" formControlName="rooms"
+               class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label for="floor">Piętro:</label>
+        <input id="floor" type="floor" formControlName="floor"
+               class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label for="bildYear">Rok budowy:</label>
+        <input id="bildYear" type="bildYear" formControlName="bildYear"
+               class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label for="garage">Garaż:</label>
+        <select id="garage" name="garage" formControlName="garage">
+          <option value="no">Tak</option>
+          <option value="yes">Nie</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="elevator">Winda:</label>
+        <select id="elevator" name="elevator" formControlName="elevator">
+          <option value="no">Tak</option>
+          <option value="yes">Nie</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="basement">Piwnica:</label>
+        <select id="basement" name="basement" formControlName="basement">
+          <option value="no">Tak</option>
+          <option value="yes">Nie</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="photos">Zdjecia</label>
         <ngx-dropzone (change)="onSelect($event)">
           <ngx-dropzone-label>Naciśnij lub przeciągnij zdjęcia</ngx-dropzone-label>
         <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">

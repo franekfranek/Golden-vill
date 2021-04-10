@@ -1,0 +1,6 @@
+<button [routerLink]="['/szukaj']">Wyszukaj</button>
+<div >
+  <div *ngFor="let estate of estates">
+    <app-estate-card [estate]="estate"></app-estate-card>
+  </div>
+</div>

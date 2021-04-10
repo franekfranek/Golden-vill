@@ -29,19 +29,21 @@ export class EstateCreateComponent implements OnInit {
     this.getEstates();
   }
 
-  getEstates(): void {
-    this.firebaseService.getEstates().subscribe((res) =>{
-      this.estates = res.map((estate : any) => {
-        // console.log(estate.payload.doc.data());
-        let details = estate.payload.doc.data();
-        return{
-          id: estate.payload.doc.id,
-          city: details.city,
-          street: details.street,
-          links: details.links
-        } as IEstate
-      });
-    });
+  formInit(data: IEstate | undefined): void{
+    this.form = this.fb.group({
+      city: [data ? data.city : '', Validators.required],
+      street: [data ? data.street : '', Validators.required],
+      price: [data ? data.price : '', Validators.required],
+      type: [data ? data.type : '', Validators.required],
+      class: [data ? data.class : '', Validators.required],
+      sfootage: [data ? data.sfootage : '', Validators.required],
+      rooms: [data ? data.rooms : '', Validators.required],
+      floor: [data ? data.floor : '', Validators.required],
+      bildYear: [data ? data.bildYear : '', Validators.required],
+      garage: [data ? data.garage : '', Validators.required],
+      elevator: [data ? data.elevator : '', Validators.required],
+      basement: [data ? data.basement : '', Validators.required],
+    })
   }
 
   openModal(content: TemplateRef<any>, estateId: string | undefined): void{
@@ -51,25 +53,57 @@ export class EstateCreateComponent implements OnInit {
     this.modalService.open(content, { backdrop: 'static', centered: true });
   }
 
-  formInit(data: IEstate | undefined): void{
-    this.form = this.fb.group({
-      city: [data ? data.city : '', Validators.required],
-      street: [data ? data.street : '', Validators.required]
-    })
+  onSelect(event: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+    console.log(this.files);
+  }
+
+  onRemove(event: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  logout(){
+    this.firebaseService.logout();
+  }
+
+  getEstates(): void {
+    this.firebaseService.getEstates().subscribe((res) =>{
+      
+      this.estates = res.map((estate : any) => {
+        // console.log(estate.payload.doc.data());
+        let details = estate.payload.doc.data();
+        return{
+          id: estate.payload.doc.id,
+          city: details.city,
+          street: details.street,
+          price: details.price,
+          links: details.links
+        } as IEstate
+      });
+    });
   }
 
   addEstate(links: string[]): Observable<any>{
-    // this.form.addControl('urls', new FormControl(urls));
+    console.log(this.form);
     let data = {
       city: this.form.value.city,
       street: this.form.value.street,
+      price: this.form.value.price,
+      type: this.form.value.type,
+      class: this.form.value.class,
+      sfootage: this.form.value.sfootage,
+      rooms: this.form.value.rooms,
+      floor: this.form.value.floor,
+      bildYear: this.form.value.bildYear, 
+      garage: this.form.value.garage, 
+      elevator: this.form.value.elevator, 
+      basement: this.form.value.basement, 
       links: links
     } as IEstate;
 
     return from(this.firebaseService.addEstate(data))
-    // this.firebaseService.addEstate(data).then((res) =>{
-    //   console.log(res);
-    // });
   }
   
   updateEstate(estateId: string | undefined): void{
@@ -82,7 +116,6 @@ export class EstateCreateComponent implements OnInit {
   }
 
   handleSaveEstate() {
-    let result: string[];
     this.uploadToCloudinary().pipe(
       switchMap(urls => this.addEstate(urls))
     ).subscribe({
@@ -133,16 +166,5 @@ export class EstateCreateComponent implements OnInit {
     );
   }
   
-
-  onSelect(event: any) {
-    console.log(event);
-    this.files.push(...event.addedFiles);
-    console.log(this.files);
-  }
-
-  onRemove(event: any) {
-    console.log(event);
-    this.files.splice(this.files.indexOf(event), 1);
-  }
   
 }
