@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService, IEstate } from 'src/app/_services/firebase.service';
+import { IEstate } from 'src/app/Models/IEstate';
+import { EstateService } from 'src/app/_services/estate.service';
 
 @Component({
   selector: 'app-estate-list',
@@ -9,13 +10,13 @@ import { FirebaseService, IEstate } from 'src/app/_services/firebase.service';
 export class EstateListComponent implements OnInit {
   estates: IEstate[];
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(private estateService: EstateService) { }
 
   ngOnInit(): void {
   }
 
   loadEstates(){
-    this.firebaseService.getEstates().subscribe((res) =>{
+    this.estateService.getEstates().subscribe((res) =>{
       this.estates = res.map((estate : any) => {
         // console.log(estate.payload.doc.data());
         let details = estate.payload.doc.data();

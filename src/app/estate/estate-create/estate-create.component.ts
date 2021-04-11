@@ -1,10 +1,12 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FirebaseService, IEstate } from 'src/app/_services/firebase.service';
 import { CloudinaryService } from 'src/app/_services/cloudinary.service';
-import { forkJoin, from, Observable, of } from 'rxjs';
-import { map, finalize, switchMap } from 'rxjs/operators';
+import { forkJoin, from, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { IEstate } from 'src/app/Models/IEstate';
+import { AuthService } from 'src/app/_services/auth.service';
+import { EstateService } from 'src/app/_services/estate.service';
 @Component({
   selector: 'app-estate-create',
   templateUrl: './estate-create.component.html',
@@ -21,8 +23,9 @@ export class EstateCreateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private firebaseService: FirebaseService,
-    private cloudinary: CloudinaryService 
+    private estateService: EstateService,
+    private cloudinary: CloudinaryService,
+    private authService: AuthService 
   ) { }
 
   ngOnInit(): void {
@@ -65,14 +68,13 @@ export class EstateCreateComponent implements OnInit {
   }
 
   logout(){
-    this.firebaseService.logout();
+    this.authService.logout();
   }
 
   getEstates(): void {
-    this.firebaseService.getEstates().subscribe((res) =>{
+    this.estateService.getEstates().subscribe((res) =>{
       
       this.estates = res.map((estate : any) => {
-        // console.log(estate.payload.doc.data());
         let details = estate.payload.doc.data();
         return{
           id: estate.payload.doc.id,
@@ -103,16 +105,16 @@ export class EstateCreateComponent implements OnInit {
       links: links
     } as IEstate;
 
-    return from(this.firebaseService.addEstate(data))
+    return from(this.estateService.addEstate(data))
   }
   
   updateEstate(estateId: string | undefined): void{
-    this.firebaseService.updateEstate(estateId, this.form.value).then();
+    this.estateService.updateEstate(estateId, this.form.value).then();
   }
   
   removeEstate(estateId: string | undefined): void{
     console.log(estateId);
-    this.firebaseService.deleteEstate(estateId).then();
+    this.estateService.deleteEstate(estateId).then();
   }
 
   handleSaveEstate() {

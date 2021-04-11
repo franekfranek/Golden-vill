@@ -3,8 +3,10 @@
 
     <div class="form-group">
       <label for="local">Lokalizacja</label>
-      <input id="local" type="text" formControlName="local"
-             class="form-control"/>
+      <select id="local" name="local" formControlName="local">
+        <option value="Warszawa">Warszawa</option>
+        <option value="Lodz">Łódź</option>
+      </select>
     </div>
     
     <div class="form-group">
@@ -36,12 +38,6 @@
         <option value="rent">Dzierżawa</option>
       </select>
     </div>
-    
-    <div class="form-group">
-      <label for="rooms">Ilość pokoi:</label>
-      <input id="rooms" type="rooms" formControlName="rooms"
-             class="form-control"/>
-    </div>
 
   </form>
 
@@ -52,8 +48,6 @@
   </button>
   
 </div>
-
-<button (click)="search()">Search</button>
 
 <div class="searched-elements">
   <div class="row" *ngIf='result.length'>

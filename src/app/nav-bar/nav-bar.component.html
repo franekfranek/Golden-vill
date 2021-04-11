@@ -1,2 +1,9 @@
 <p>nav-bar works!</p>
 
+<div *ngIf="isSignin">
+  <button (click)="logout()">Wyloguj mnie</button>
+</div>
+
+<button (click)="logout()">Wyloguj mnie</button>
+
+

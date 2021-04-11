@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FirebaseService, IEstate } from 'src/app/_services/firebase.service';
+import { IEstate } from 'src/app/Models/IEstate';
+import { AuthService } from 'src/app/_services/auth.service';
+import { EstateService } from 'src/app/_services/estate.service';
 
 @Component({
   selector: 'app-estate-details',
@@ -12,7 +14,7 @@ export class EstateDetailsComponent implements OnInit {
   id: any;
 
   constructor(private route: ActivatedRoute,
-              private firebaseService: FirebaseService) {
+              private estateService: EstateService) {
     this.id = this.route.snapshot.paramMap.get('id'); //get id parameter
    }
 
@@ -21,7 +23,7 @@ export class EstateDetailsComponent implements OnInit {
   }
 
   getEstate(id: any){
-    this.firebaseService.getEstateById(id).subscribe(data =>{
+    this.estateService.getEstateById(id).subscribe(data =>{
       this.estate = data as IEstate;
       console.log(this.estate);
     })

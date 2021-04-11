@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { FirebaseService } from '../_services/firebase.service';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,13 +10,13 @@ export class NavBarComponent implements OnInit {
   isSignin = false;
   @Output() isLogout = new EventEmitter<void>();
 
-  constructor(public firebaseService: FirebaseService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   logout(){
-    this.firebaseService.logout();
+    this.authService.logout();
     this.isLogout.emit();
     this.isSignin = false;
   }

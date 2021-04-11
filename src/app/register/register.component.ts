@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from '../_services/firebase.service';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +9,7 @@ import { FirebaseService } from '../_services/firebase.service';
 export class RegisterComponent implements OnInit {
   isSignedIn = false;
 
-  constructor(public firebaseService : FirebaseService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
     if(localStorage.getItem('user') !== null)
@@ -19,20 +19,19 @@ export class RegisterComponent implements OnInit {
   }
 
   async onSignup(email: string, password: string){
-    await this.firebaseService.signUp(email, password);
-    if(this.firebaseService.isLoggedIn)
+    await this.authService.signUp(email, password);
+    if(this.authService.isLoggedIn)
     this.isSignedIn = true;
   }
 
   async onSignin(email: string, password: string){
-    await this.firebaseService.signIn(email, password);
-    if(this.firebaseService.isLoggedIn)
+    await this.authService.signIn(email, password);
+    if(this.authService.isLoggedIn)
     this.isSignedIn = true;
   }
 
   handlelogout(){
     this.isSignedIn = false;
-    
   }
 
 }

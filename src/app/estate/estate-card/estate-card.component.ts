@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IEstate } from 'src/app/_services/firebase.service';
+import { IEstate } from 'src/app/Models/IEstate';
+
 
 @Component({
   selector: 'app-estate-card',
@@ -12,7 +13,6 @@ export class EstateCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // console.log(this.estate);
     this.formatData(this.estate);
   }
 
